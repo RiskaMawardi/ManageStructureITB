@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('PositionID')->nullable();
             $table->string('EmpID')->nullable();
             $table->string('EmployeePosition')->nullable();
-            $table->boolean('Status_Default')->default(false);
-            $table->boolean('Acting')->default(false);
-            $table->boolean('IsVacant')->default(false);
-            $table->boolean('IsCoordinator')->default(false);
-            $table->boolean('Active')->default(false);
+            $table->string('Status_Default')->nullable();
+            $table->string('Acting')->nullable();
+            $table->string('IsVacant')->nullable();
+            $table->string('IsCoordinator')->nullable();
+            $table->string('Active')->nullable();
             $table->dateTime('StartDate')->nullable();
             $table->dateTime('EndDate')->nullable();
             $table->string('UserID')->nullable();

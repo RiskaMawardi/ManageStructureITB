@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmployeeListController;
+use App\Http\Controllers\StructureController;
+use App\Http\Controllers\ManageStructureController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,6 +18,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/employee', [EmployeeListController::class, 'index'])->name('employee.index');
+    Route::get('/employee/data', [EmployeeListController::class, 'fetchDataEmployee'])->name('employee.data');
+    Route::post('/employee-store', [EmployeeListController::class, 'store'])->name('employee.store');
+    Route::get('/employee/{id}/edit', [EmployeeListController::class, 'edit']);
+    Route::put('/employee/update/{id}', [EmployeeListController::class, 'update'])->name('employee.update');
+
+    Route::get('/structure', [StructureController::class, 'index']);
+    Route::post('/fetch-data', [StructureController::class, 'fetchDataByArea'])->name('structure.fetchData');
+
+    Route::get('/manage', [ManageStructureController::class, 'index']);
+
 });
 
 require __DIR__.'/auth.php';
