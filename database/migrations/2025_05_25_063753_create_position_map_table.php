@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('Position_Map_IBT', function (Blueprint $table) {
             $table->bigIncrements('ID');
-            $table->string('PositionID')->nullable();
-            $table->string('EmpID')->nullable();
+            $table->string('PositionID');
+            $table->string('EmpID');
             $table->string('EmployeePosition')->nullable();
             $table->string('Status_Default')->nullable();
             $table->string('Acting')->nullable();

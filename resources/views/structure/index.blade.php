@@ -37,6 +37,8 @@
             </div>
         </div>
     </div>
+    {{-- Panggil modal terpisah --}}
+    @include('structure.modal-detail')
 
     @push('scripts')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -85,7 +87,13 @@
                     }
                 },
                 columns: [
-                    { data: 'PositionID', name: 'PositionID' },
+                    {  
+                        data: 'PositionID', 
+                        name: 'PositionID',
+                        render: function (data, type, row) {
+                            return `<a href="#" class="position-link text-blue-600 hover:underline view-detail" data-id="${row.PositionID}">${data}</a>`;
+                        }
+                    },
                     { data: 'StartDatePosStructure', name: 'StartDatePosStructure' },
                     { data: 'StartDatePosMap', name: 'StartDatePosMap' },
                 ],
@@ -110,6 +118,111 @@
                     return;
                 }
                 table.ajax.reload();
+            });
+
+            // Fungsi untuk buka modal
+            function openModal() {
+                $('#detailModal').removeClass('hidden');
+            }
+
+            // Fungsi untuk tutup modal
+            function closeModal() {
+                $('#detailModal').addClass('hidden');
+            }
+
+            // Fungsi format date untuk input datetime-local
+            function formatDateTimeLocal(dateString) {
+                if (!dateString) return '';
+                let dt = new Date(dateString);
+                let pad = (n) => (n < 10 ? '0' + n : n);
+                return dt.getFullYear() + '-' + pad(dt.getMonth() + 1) + '-' + pad(dt.getDate()) +
+                    'T' + pad(dt.getHours()) + ':' + pad(dt.getMinutes());
+            }
+
+            // Event klik link position untuk load detail
+            $(document).on('click', '.view-detail', function (e) {
+                e.preventDefault();
+                const id = $(this).data('id');
+
+                $.ajax({
+                    url: `/structure/${id}`,
+                    method: 'GET',
+                    success: function (data) {
+                        $('#structureId').val(data.ID || '');
+
+                        $('#ID').val(data.ID || '');
+                        $('#PositionID').val(data.PositionID || '');
+                        $('#EmpID').val(data.EmpID || '');
+                        $('#EmployeePosition').val(data.EmployeePosition || '');
+                        $('#Status_Default').val(data.Status_Default || '');
+                        $('#Acting').val(data.Acting || '');
+                        $('#Active').val(data.Active || '');
+                        $('#IsCoordinator').val(data.IsCoordinator || '');
+                        $('#IsVacant').val(data.IsVacant || '');
+                        $('#LastUpdate').val(data.LastUpdate || '');
+                        $('#UserID').val(data.UserID || '');
+
+                        $('#StartDate').val(formatDateTimeLocal(data.StartDate));
+                        $('#EndDate').val(formatDateTimeLocal(data.EndDate));
+
+                        if (data.employee) {
+                            $('#employee_RefEmpID').val(data.employee.RefEmpID || '');
+                            $('#employee_EmployeeID').val(data.employee.EmployeeID || '');
+                            $('#employee_EmployeeName').val(data.employee.EmployeeName || '');
+                        } else {
+                            $('#employee_RefEmpID').val('');
+                            $('#employee_EmployeeID').val('');
+                            $('#employee_EmployeeName').val('');
+                        }
+
+                        if (data.position_structure) {
+                            $('#position_structure_PositionRecord').val(data.position_structure.PositionRecord || '');
+                            $('#position_structure_PositionID').val(data.position_structure.PositionID || '');
+                            $('#position_structure_EmployeePosition').val(data.position_structure.EmployeePosition || '');
+                            $('#position_structure_CompanyID').val(data.position_structure.CompanyID || '');
+                            $('#position_structure_AreaID').val(data.position_structure.AreaID || '');
+                        } else {
+                            $('#position_structure_PositionRecord').val('');
+                            $('#position_structure_PositionID').val('');
+                            $('#position_structure_EmployeePosition').val('');
+                            $('#position_structure_CompanyID').val('');
+                            $('#position_structure_AreaID').val('');
+                        }
+
+                        openModal();
+                    },
+                    error: function () {
+                        alert('Gagal mengambil data detail.');
+                    }
+                });
+            });
+
+            // Tutup modal tombol & backdrop
+            $('#closeModalBtn, #cancelBtn').click(function () {
+                closeModal();
+            });
+
+            // Submit update form via AJAX
+            $('#updateForm').on('submit', function (e) {
+                e.preventDefault();
+                const id = $('#structureId').val();
+
+                $.ajax({
+                    url: `/structure/${id}`,
+                    method: 'PUT',
+                    data: $(this).serialize(),
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    success: function () {
+                        alert('Data berhasil diperbarui!');
+                        closeModal();
+                        $('#positionsTable').DataTable().ajax.reload();
+                    },
+                    error: function () {
+                        alert('Gagal menyimpan perubahan.');
+                    }
+                });
             });
         });
     </script>

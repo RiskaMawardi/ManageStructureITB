@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('Position_Structure_IBT', function (Blueprint $table) {
             $table->bigIncrements('PositionRecord');
-            $table->string('PositionID')->nullable();
+            $table->string('PositionID')->unique();
             $table->string('EmployeePosition')->nullable();
             $table->string('CompanyID')->nullable();
             $table->string('AreaID')->nullable();

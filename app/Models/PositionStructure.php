@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PositionStructure extends Model
 {
     protected $table = 'Position_Structure_IBT';
-    protected $primaryKey = 'PositionID';
+    protected $primaryKey = 'PositionRecord'; // <-- ini yang benar
     public $timestamps = false;
     protected $fillable = [
         'PositionID',

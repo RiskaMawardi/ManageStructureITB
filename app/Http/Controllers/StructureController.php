@@ -33,6 +33,8 @@ class StructureController extends Controller
                     ->orWhere('EndDate', '>', Carbon::now());
             });
 
+            //dd($query->get());
+
             return DataTables::eloquent($query)
             ->addColumn('PositionID', function ($position) {
                 return $position->PositionID ?? '-';
@@ -45,4 +47,17 @@ class StructureController extends Controller
             })
             ->make(true);
     }
+    public function show($id)
+    {
+        $data = PositionMap::with(['employee', 'positionStructure'])
+        ->where('PositionID', $id)
+        ->firstOrFail();
+
+        if ($data->EndDate === null || $data->EndDate > Carbon::now()) {
+            return response()->json($data);
+        }
+
+        return response()->json(['message' => 'Data sudah tidak aktif.'], 404);
+    }
+
 }

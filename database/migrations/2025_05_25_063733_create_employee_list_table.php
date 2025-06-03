@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('EmployeeList_IBT', function (Blueprint $table) {
             $table->bigIncrements('RefEmpID');
             $table->string('CompanyID')->nullable();
-            $table->string('EmployeeID')->nullable();
+            $table->string('EmployeeID')->unique();
             $table->string('EmpOldID')->nullable();
             $table->string('EmployeeName')->nullable();
             $table->string('EmployeeStatus')->nullable();

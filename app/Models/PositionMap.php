@@ -30,8 +30,9 @@ class PositionMap extends Model
         return $this->belongsTo(EmployeeList::class, 'EmpID', 'EmployeeID');
     }
     public function positionStructure()
-    {
-        return $this->belongsTo(PositionStructure::class, 'PositionID', 'PositionID');
-    }
+{
+    return $this->belongsTo(PositionStructure::class, 'PositionID', 'PositionID');
+}
+
 
 }
