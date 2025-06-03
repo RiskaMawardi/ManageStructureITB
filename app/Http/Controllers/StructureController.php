@@ -33,15 +33,15 @@ class StructureController extends Controller
                     ->orWhere('EndDate', '>', Carbon::now());
             });
 
-        return DataTables::eloquent($query)
-            ->addColumn('EmployeeName', function ($position) {
-                return $position->EmployeeName ?? '-';
-            })
-            ->addColumn('EmployeeID', function ($position) {
-                return $position->EmployeeID ?? '-';
-            })
+            return DataTables::eloquent($query)
             ->addColumn('PositionID', function ($position) {
                 return $position->PositionID ?? '-';
+            })
+            ->addColumn('StartDatePosStructure', function ($position) {
+                return optional($position->positionStructure)->StartDate ?? '-';
+            })
+            ->addColumn('StartDatePosMap', function ($position) {
+                return $position->StartDate ?? '-';
             })
             ->make(true);
     }

@@ -20,7 +20,7 @@ class PositionMap extends Model
         'Active',
         'StartDate',
         'EndDate',
-        'User ID',
+        'UserID',
         'LastUpdate',
     ];
 

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class PositionStructure extends Model
 {
     protected $table = 'Position_Structure_IBT';
-    protected $primaryKey = 'RefEmpID';
+    protected $primaryKey = 'PositionID';
     public $timestamps = false;
     protected $fillable = [
         'PositionID',
-        'EmployeePosition',
+        'EmployeePosition', 
         'CompanyID',
         'AreaID',
         'AreaBaseID',
@@ -31,7 +31,7 @@ class PositionStructure extends Model
         'StartDate',
         'EndDate',
         'PositionStatus',
-        'User ID',
+        'UserID',
         'LastUpdate',
         'AreaGroupID',
     ];

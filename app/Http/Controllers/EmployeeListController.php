@@ -78,6 +78,7 @@ class EmployeeListController extends Controller
         $employee->PhoneNumber = $request->phone;
         $employee->StatusVacant = $request->status_vacant;
         $employee->JoinDate = $request->join_date;
+        $employee->EmployeeStatus = 'A';
         $employee->EndDate = '4009-12-31';
         $employee->UserID = 'System';
         $employee->LastUpdate = Carbon::now();

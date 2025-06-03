@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/fetch-data', [StructureController::class, 'fetchDataByArea'])->name('structure.fetchData');
 
     Route::get('/manage', [ManageStructureController::class, 'index']);
+    Route::get('/check-position-id', [ManageStructureController::class, 'checkPositionId']);
+    Route::post('/add-new-rayon',[ManageStructureController::class,'addNewRayon'])->name('addNewRayon');
 
 });
 

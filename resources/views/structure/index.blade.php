@@ -28,8 +28,8 @@
                     <thead>
                         <tr class="bg-gray-50">
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date Structure</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date Map</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -86,8 +86,8 @@
                 },
                 columns: [
                     { data: 'PositionID', name: 'PositionID' },
-                    { data: 'EmployeeID', name: 'EmployeeID' },
-                    { data: 'EmployeeName', name: 'EmployeeName' }
+                    { data: 'StartDatePosStructure', name: 'StartDatePosStructure' },
+                    { data: 'StartDatePosMap', name: 'StartDatePosMap' },
                 ],
                 deferLoading: 0,
                 order: [[0, 'desc']],
