@@ -213,7 +213,7 @@
             });
         });
     </script>
-    @endpush
+ 
 
 
     <script>
@@ -253,4 +253,5 @@
             });
         });
     </script>
+       @endpush
 </x-app-layout>

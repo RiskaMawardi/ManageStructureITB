@@ -1,145 +1,118 @@
-<div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-  <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 relative max-h-[90vh] overflow-y-auto">
+<div id="detailModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50">
+    <div class="bg-white w-full max-w-5xl rounded-lg shadow-lg p-6 overflow-y-auto max-h-[90vh]">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-900">Detail Rayon</h3>
+            <button id="closeModalBtn" class="text-gray-600 hover:text-gray-800 text-2xl">&times;</button>
+        </div>
 
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold">Detail Struktur Posisi</h2>
-      <button id="closeModalBtn" class="text-gray-600 hover:text-red-500 text-3xl font-bold">&times;</button>
+        <form id="updatePositionStructureForm">
+            @csrf
+            @method('PUT')
+            <input type="hidden" id="structureId" name="ID">
+
+            <!-- Informasi Rayon -->
+            <div class="mb-6">
+                <h4 class="text-md font-semibold mb-2">Informasi Rayon</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="PositionID">Position ID</label>
+                        <input type="text" id="position_structure_PositionID" name="PositionID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="AreaID">Area ID</label>
+                        <input type="text" id="position_structure_AreaID" name="AreaID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="AreaBaseID">Area Base ID</label>
+                        <input type="text" id="position_structure_AreaBaseID" name="AreaBaseID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="AreaFF">Area FF</label>
+                        <input type="text" id="position_structure_AreaFF" name="AreaFF" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="RayonID">Rayon ID</label>
+                        <input type="text" id="position_structure_RayonID" name="RayonID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="LineID">Line ID</label>
+                        <input type="text" id="position_structure_LineID" name="LineID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="LineBaseID">Line Base ID</label>
+                        <input type="text" id="position_structure_LineBaseID" name="LineBaseID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="LinePositionFF">Line Position FF</label>
+                        <input type="text" id="position_structure_LinePositionFF" name="LinePositionFF" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="AmPos">AM Position</label>
+                        <input type="text" id="position_structure_AmPos" name="AmPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="RmPos">RM Position</label>
+                        <input type="text" id="position_structure_RmPos" name="RmPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="SMPos">SM Position</label>
+                        <input type="text" id="position_structure_SMPos" name="SMPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="NSMPos">NSM Position</label>
+                        <input type="text" id="position_structure_NSMPos" name="NSMPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="MMPos">MM Position</label>
+                        <input type="text" id="position_structure_MMPos" name="MMPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="GMPos">GM Position</label>
+                        <input type="text" id="position_structure_GMPos" name="GMPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="MDPos">MD Position</label>
+                        <input type="text" id="position_structure_MDPos" name="MDPos" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="StartDate">Start Date</label>
+                        <input type="datetime-local" id="position_structure_StartDate" name="StartDate" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="EndDate">End Date</label>
+                        <input type="datetime-local" id="position_structure_EndDate" name="EndDate" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="Status_Default">Position Status</label>
+                        <input type="text" id="position_structure_PositionStatus" name="Status_Default" class="form-input w-full" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Employee -->
+            <!-- <div class="mb-4">
+                <h4 class="text-md font-semibold mb-2">Employee</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="EmpID">Employee ID</label>
+                        <input type="text" id="employee_EmployeeID" name="EmpID" class="form-input w-full" />
+                    </div>
+                    <div>
+                        <label for="EmployeePosition">Employee Position</label>
+                        <input type="text" id="EmployeePosition" name="EmployeePosition" class="form-input w-full" />
+                    </div>
+                    <div class="col-span-2">
+                        <label for="EmployeeName">Employee Name</label>
+                        <input type="text" id="employee_EmployeeName" name="EmployeeName" class="form-input w-full" />
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Buttons -->
+            <!-- <div class="flex justify-end gap-2 mt-6">
+                <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Update</button>
+            </div> -->
+        </form>
     </div>
-
-    <form id="updateForm">
-      @csrf
-      @method('PUT')
-      <input type="hidden" id="structureId" name="ID" />
-
-      <!-- SECTION 1: Position Map -->
-      <section class="mb-6">
-        <h3 class="text-xl font-semibold border-b pb-2 mb-4">Position Map</h3>
-        <div class="grid grid-cols-2 gap-4 text-sm">
-
-          <div>
-            <label class="font-medium">Position ID</label>
-            <input type="text" id="PositionID" name="PositionID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">EmpID</label>
-            <input type="text" id="EmpID" name="EmpID" class="w-full border rounded px-2 py-1">
-          </div>
-
-          <div>
-            <label class="font-medium">Employee Position</label>
-            <input type="text" id="EmployeePosition" name="EmployeePosition" class="w-full border rounded px-2 py-1">
-          </div>
-
-          <div>
-            <label class="font-medium">Status Default</label>
-            <input type="text" id="Status_Default" name="Status_Default" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Acting</label>
-            <input type="text" id="Acting" name="Acting" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Active</label>
-            <input type="text" id="Active" name="Active" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Is Coordinator</label>
-            <input type="text" id="IsCoordinator" name="IsCoordinator" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Is Vacant</label>
-            <input type="text" id="IsVacant" name="IsVacant" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Last Update</label>
-            <input type="text" id="LastUpdate" name="LastUpdate" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Start Date</label>
-            <input type="datetime-local" id="StartDate" name="StartDate" class="w-full border rounded px-2 py-1">
-          </div>
-
-          <div>
-            <label class="font-medium">End Date</label>
-            <input type="datetime-local" id="EndDate" name="EndDate" class="w-full border rounded px-2 py-1">
-          </div>
-
-          <div>
-            <label class="font-medium">User ID</label>
-            <input type="text" id="UserID" name="UserID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- SECTION 2: Employee -->
-      <section class="mb-6">
-        <h3 class="text-xl font-semibold border-b pb-2 mb-4">Employee</h3>
-        <div class="grid grid-cols-2 gap-4 text-sm">
-
-          <div>
-            <label class="font-medium">RefEmpID</label>
-            <input type="text" id="employee_RefEmpID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">EmployeeID</label>
-            <input type="text" id="employee_EmployeeID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div class="col-span-2">
-            <label class="font-medium">EmployeeName</label>
-            <input type="text" id="employee_EmployeeName" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- SECTION 3: Position Structure -->
-      <section class="mb-6">
-        <h3 class="text-xl font-semibold border-b pb-2 mb-4">Position Structure</h3>
-        <div class="grid grid-cols-2 gap-4 text-sm">
-
-          <div>
-            <label class="font-medium">Position Record</label>
-            <input type="text" id="position_structure_PositionRecord" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Position ID</label>
-            <input type="text" id="position_structure_PositionID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Employee Position</label>
-            <input type="text" id="position_structure_EmployeePosition" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Company ID</label>
-            <input type="text" id="position_structure_CompanyID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-          <div>
-            <label class="font-medium">Area ID</label>
-            <input type="text" id="position_structure_AreaID" class="w-full border rounded px-2 py-1" readonly>
-          </div>
-
-        </div>
-      </section>
-
-      <div class="flex justify-end gap-2">
-        <button type="button" id="cancelBtn" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Batal</button>
-        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Simpan</button>
-      </div>
-
-    </form>
-  </div>
 </div>
