@@ -216,9 +216,7 @@
                         {
                             data: 'PositionID',
                             name: 'PositionID',
-                            render: function (data, type, row) {
-                                return `<a href="#" class="position-link text-blue-600 hover:underline view-detail" data-id="${row.PositionID}">${data}</a>`;
-                            }
+                            
                         },
                         { data: 'StartDatePosStructure', name: 'StartDatePosStructure' },
                         { data: 'StartDatePosMap', name: 'StartDatePosMap' },
@@ -347,70 +345,80 @@
                 }
 
                 // Template generator for employee form block
-                function generateEmployeeBlock(data = {}, index = 0, empIDs = []) {
-                    return `
-                        <div class="employee-block border rounded p-4 mb-4 bg-gray-50 shadow-sm relative">
-                            <button type="button" class="delete-btn absolute top-2 right-2 text-red-500 hover:text-red-700">
-                                &times;
-                            </button>
-                            <input type="hidden" name="data[${index}][ID]" value="${data.ID || ''}" />
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="mb-4 col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700">Employee ID</label>
-                                    <select 
-                                        name="data[${index}][EmpID]" 
-                                        class="select2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <option value="">-- Select Employee ID --</option>
-                                        ${empIDs.map(empID => `
-                                            <option value="${empID}" ${empID === data.EmpID ? 'selected' : ''}>${empID}</option>
-                                        `).join('')}
-                                    </select>
-                                </div>
+              function generateEmployeeBlock(data = {}, index = 0) {
+    const structure = data.position_structure || {};
 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Employee Position</label>
-                                    <input 
-                                        type="text" 
-                                        name="data[${index}][EmployeePosition]" 
-                                        value="${data.EmployeePosition || ''}" 
-                                        class="form-input w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" 
-                                    />
-                                </div>
+    return `
+        <div class="employee-block border rounded-lg p-4 mb-6 bg-white shadow-sm">
+            <h3 class="text-lg font-semibold text-indigo-700 mb-4">Employee #${index + 1}</h3>
+            
+            <div class="grid grid-cols-2 gap-4 text-sm text-gray-800">
+                <div class="col-span-2 border-b pb-2">
+                    <p class="text-gray-500">Position ID</p>
+                    <p class="font-medium text-gray-900">${data.PositionID || '-'}</p>
+                </div>
+                
+                <div class="col-span-2 border-b pb-2">
+                    <p class="text-gray-500">Employee ID</p>
+                    <p class="font-medium text-gray-900">${data.EmpID || '-'}</p>
+                </div>
 
-                                <div class="col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Employee Name</label>
-                                    <input 
-                                        type="text" 
-                                        name="data[${index}][EmployeeName]" 
-                                        value="${data.employee?.EmployeeName || ''}" 
-                                        class="form-input w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" 
-                                    />
-                                </div>
+                <div class="border-b pb-2">
+                    <p class="text-gray-500">Employee Position</p>
+                    <p class="font-medium text-gray-900">${data.EmployeePosition || '-'}</p>
+                </div>
 
-                                <div class="col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Start Date Map</label>
-                                    <input 
-                                        type="datetime-local" 
-                                        name="data[${index}][StartDate]" 
-                                        value="${formatDateTimeLocal(data.StartDate)}" 
-                                        class="form-input w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" 
-                                    />
-                                </div>
+                <div class="border-b pb-2">
+                    <p class="text-gray-500">Employee Name</p>
+                    <p class="font-medium text-gray-900">${data.employee?.EmployeeName || '-'}</p>
+                </div>
 
-                                <div class="col-span-2">
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">End Date Map</label>
-                                    <input 
-                                        type="datetime-local" 
-                                        name="data[${index}][EndDate]" 
-                                        value="${formatDateTimeLocal(data.EndDate)}" 
-                                        class="form-input w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm" 
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
+                <div class="border-b pb-2">
+                    <p class="text-gray-500">Start Date Map</p>
+                    <p class="font-medium text-gray-900">${formatDateTimeLocal(data.StartDate) || '-'}</p>
+                </div>
+
+                <div class="border-b pb-2">
+                    <p class="text-gray-500">End Date Map</p>
+                    <p class="font-medium text-gray-900">${formatDateTimeLocal(data.EndDate) || '-'}</p>
+                </div>
+            </div>
+
+            <div class="mt-6 bg-blue-50 border-l-4 border-blue-300 p-4 rounded-md">
+                <h4 class="text-md font-semibold text-blue-800 mb-2">Position Structure Info</h4>
+                <div class="grid grid-cols-2 gap-4 text-sm text-gray-800">
+                    <div>
+                        <p class="text-gray-500">Area</p>
+                        <p class="font-medium">${structure.AreaID || '-'}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Line</p>
+                        <p class="font-medium">${structure.LineID || '-'}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Rayon</p>
+                        <p class="font-medium">${structure.RayonID || '-'}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Company</p>
+                        <p class="font-medium">${structure.CompanyID || '-'}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">AM</p>
+                        <p class="font-medium">${structure.AmPos || '-'}</p>
+                    </div>
+                     <div>
+                        <p class="text-gray-500">RM</p>
+                        <p class="font-medium">${structure.RmPos || '-'}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+
+
 
                 // Handle open modal with data
                 $(document).on('click', '.edit-btn', function (e) {
@@ -452,47 +460,105 @@
                     closeManageModal();
                 });
 
-                // Tambah Employee
-                $('#addEmployeeBtn').on('click', function () {
-                    const newBlock = generateEmployeeBlock({}, employeeIndex, globalEmpIDs);
-                    $('#employee-section').append(newBlock);
-
-                    // Re-initialize select2 for the last appended element
-                    $('#employee-section .employee-block:last .select2').select2({
-                        placeholder: "-- Pilih Employee ID --",
-                        allowClear: true,
-                        width: '100%'
-                    });
-
-                    employeeIndex++;
-                });
+                
 
                 // Hapus Employee Block
                 $(document).on('click', '.delete-btn', function () {
                     $(this).closest('.employee-block').remove();
                 });
 
-                // Submit update manage form
-                $('#editStructureForm').on('submit', function (e) {
-                    e.preventDefault();
+                $('#setVacant').on('click', function () {
+                    Swal.fire({
+                        title: 'Set to Vacant',
+                        html: `
+                            <label for="vacantDate" class="block text-sm mb-1">Start Date</label>
+                            <input type="datetime-local" id="vacantDate" class="swal2-input" value="${getDefaultDateTime()}">
+                        `,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: 'Set Vacant',
+                        cancelButtonText: 'Batal',
+                        preConfirm: () => {
+                            const dateInput = document.getElementById('vacantDate').value;
+                            if (!dateInput) {
+                                Swal.showValidationMessage('Tanggal tidak boleh kosong');
+                                return false;
+                            }
+                            return dateInput;
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const inputTanggal = result.value;
 
-                    $.ajax({
-                        url: `/structure/update-multiple`,
-                        method: 'PUT',
-                        data: $(this).serialize(),
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        success: function () {
-                            alert('Data berhasil disimpan!');
-                            closeManageModal();
-                            table.ajax.reload();
-                        },
-                        error: function () {
-                            alert('Gagal menyimpan data.');
+                            const positionData = [];
+
+                            $('.employee-block').each(function () {
+                                const block = $(this);
+                                const indexMatch = block.find('input[name^="data"]').attr('name').match(/\d+/);
+                                if (!indexMatch) return;
+
+                                const index = indexMatch[0];
+
+                                const positionID = block.find(`input[name="data[${index}][PositionID]"]`).val();
+                                const empID = block.find(`select[name="data[${index}][EmpID]"]`).val();
+                                const employeePosition = block.find(`input[name="data[${index}][EmployeePosition]"]`).val();
+                                const kodeRayon = extractKodeRayon(positionID);
+                                const employeeName = `${employeePosition} X ${kodeRayon}`;
+                                const oldID = block.find(`input[name="data[${index}][ID]"]`).val();
+
+                                positionData.push({
+                                    oldID: oldID,
+                                    PositionID: positionID,
+                                    EmpID: empID,
+                                    EmployeePosition: employeePosition,
+                                    EmployeeName: employeeName
+                                });
+                            });
+
+                            if (positionData.length === 0) {
+                                Swal.fire('Gagal', 'Tidak ada data posisi yang diproses.', 'error');
+                                return;
+                            }
+
+                            $.ajax({
+                                url: '/position-map/set-vacant',
+                                type: 'POST',
+                                contentType: 'application/json',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                data: JSON.stringify({
+                                    vacantStartDate: inputTanggal,
+                                    positions: positionData
+                                }),
+                                success: function () {
+                                    Swal.fire('Berhasil', 'Data telah di-set ke Vacant.', 'success')
+                                        .then(() => {
+                                            closeManageModal();
+                                            location.reload();
+                                        });
+                                },
+                                error: function () {
+                                    Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data.', 'error');
+                                }
+                            });
                         }
                     });
                 });
+
+                // Helper functions
+                function getDefaultDateTime() {
+                    const now = new Date();
+                    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                    return now.toISOString().slice(0, 16);
+                }
+
+                function extractKodeRayon(positionID) {
+                    const match = positionID.match(/D\d{4,5}$/);
+                    return match ? match[0] : 'DXXXX';
+                }
+
+                
             });
         </script>
     @endpush

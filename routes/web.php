@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/add-new-rayon',[ManageStructureController::class,'addNewRayon'])->name('addNewRayon');
 
     Route::get('/rayon/generate-pdf', [StructureController::class, 'generatePdf'])->name('rayon.generatePdf');
+    Route::post('/position-map/set-vacant', [StructureController::class, 'setVacant']);
 
    
 

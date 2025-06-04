@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class EmployeeList extends Model
 {
-    protected $table = 'EmployeeList_IBT';
+    protected $table = 'CRM.EmployeeList_IBT';
     protected $primaryKey = 'RefEmpID';
     public $timestamps = false;
     protected $fillable = [

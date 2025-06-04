@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PositionMap extends Model
 {
-    protected $table = 'Position_Map_IBT';
+    protected $table = 'CRM.Position_Map_IBT';
     protected $primaryKey = 'ID';
     public $timestamps = false;
     protected $fillable = [

@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
-            EmployeeSeeder::class,
-            RayonSeeder::class,
-            StructureSeeder::class,
+            // EmployeeSeeder::class,
+            // RayonSeeder::class,
+            // StructureSeeder::class,
         ]);
     }
 }
