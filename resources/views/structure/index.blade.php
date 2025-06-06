@@ -345,80 +345,187 @@
                 }
 
                 // Template generator for employee form block
-              function generateEmployeeBlock(data = {}, index = 0) {
-    const structure = data.position_structure || {};
+                function generateEmployeeBlock(data = {}, index = 0) {
+                    const structure = data.position_structure || {};
 
-    return `
-        <div class="employee-block border rounded-lg p-4 mb-6 bg-white shadow-sm">
-            <h3 class="text-lg font-semibold text-indigo-700 mb-4">Employee #${index + 1}</h3>
-            
-            <div class="grid grid-cols-2 gap-4 text-sm text-gray-800">
-                <div class="col-span-2 border-b pb-2">
-                    <p class="text-gray-500">Position ID</p>
-                    <p class="font-medium text-gray-900">${data.PositionID || '-'}</p>
-                </div>
-                
-                <div class="col-span-2 border-b pb-2">
-                    <p class="text-gray-500">Employee ID</p>
-                    <p class="font-medium text-gray-900">${data.EmpID || '-'}</p>
-                </div>
+                    return `
+                        <div class="employee-block border rounded-lg p-4 mb-6 bg-white shadow-sm">
+                            <h3 class="text-lg font-semibold text-indigo-700 mb-4">Employee #${index + 1}</h3>
+                            
+                            <div class="grid grid-cols-2 gap-4 text-sm text-gray-800">
+                                <div class="col-span-2 border-b pb-2">
+                                    <p class="text-gray-500">Position ID</p>
+                                    <p class="font-medium text-gray-900">${data.PositionID || '-'}</p>
+                                </div>
+                                
+                                <div class="col-span-2 border-b pb-2">
+                                    <p class="text-gray-500">Employee ID</p>
+                                    <p class="font-medium text-gray-900">${data.EmpID || '-'}</p>
+                                </div>
 
-                <div class="border-b pb-2">
-                    <p class="text-gray-500">Employee Position</p>
-                    <p class="font-medium text-gray-900">${data.EmployeePosition || '-'}</p>
-                </div>
+                                <div class="border-b pb-2">
+                                    <p class="text-gray-500">Employee Position</p>
+                                    <p class="font-medium text-gray-900">${data.EmployeePosition || '-'}</p>
+                                </div>
 
-                <div class="border-b pb-2">
-                    <p class="text-gray-500">Employee Name</p>
-                    <p class="font-medium text-gray-900">${data.employee?.EmployeeName || '-'}</p>
-                </div>
+                                <div class="border-b pb-2">
+                                    <p class="text-gray-500">Employee Name</p>
+                                    <p class="font-medium text-gray-900">${data.employee?.EmployeeName || '-'}</p>
+                                </div>
 
-                <div class="border-b pb-2">
-                    <p class="text-gray-500">Start Date Map</p>
-                    <p class="font-medium text-gray-900">${formatDateTimeLocal(data.StartDate) || '-'}</p>
-                </div>
+                                <div class="border-b pb-2">
+                                    <p class="text-gray-500">Start Date Map</p>
+                                    <p class="font-medium text-gray-900">${formatDateTimeLocal(data.StartDate) || '-'}</p>
+                                </div>
 
-                <div class="border-b pb-2">
-                    <p class="text-gray-500">End Date Map</p>
-                    <p class="font-medium text-gray-900">${formatDateTimeLocal(data.EndDate) || '-'}</p>
-                </div>
-            </div>
+                                <div class="border-b pb-2">
+                                    <p class="text-gray-500">End Date Map</p>
+                                    <p class="font-medium text-gray-900">${formatDateTimeLocal(data.EndDate) || '-'}</p>
+                                </div>
+                            </div>
 
-            <div class="mt-6 bg-blue-50 border-l-4 border-blue-300 p-4 rounded-md">
-                <h4 class="text-md font-semibold text-blue-800 mb-2">Position Structure Info</h4>
-                <div class="grid grid-cols-2 gap-4 text-sm text-gray-800">
-                    <div>
-                        <p class="text-gray-500">Area</p>
-                        <p class="font-medium">${structure.AreaID || '-'}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">Line</p>
-                        <p class="font-medium">${structure.LineID || '-'}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">Rayon</p>
-                        <p class="font-medium">${structure.RayonID || '-'}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">Company</p>
-                        <p class="font-medium">${structure.CompanyID || '-'}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">AM</p>
-                        <p class="font-medium">${structure.AmPos || '-'}</p>
-                    </div>
-                     <div>
-                        <p class="text-gray-500">RM</p>
-                        <p class="font-medium">${structure.RmPos || '-'}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
+                            <div class="mt-6 bg-blue-50 border-l-4 border-blue-300 p-4 rounded-md">
+                                <h4 class="text-md font-semibold text-blue-800 mb-2">Position Structure Info</h4>
+                                <div class="grid grid-cols-2 gap-4 text-sm text-gray-800">
+                                    <div>
+                                        <p class="text-gray-500">Area</p>
+                                        <p class="font-medium">${structure.AreaID || '-'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500">Line</p>
+                                        <p class="font-medium">${structure.LineID || '-'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500">Rayon</p>
+                                        <p class="font-medium">${structure.RayonID || '-'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500">Company</p>
+                                        <p class="font-medium">${structure.CompanyID || '-'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500">AM</p>
+                                        <p class="font-medium">${structure.AmPos || '-'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-500">RM</p>
+                                        <p class="font-medium">${structure.RmPos || '-'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }   
 
 
+                updateEmployeeBtn.addEventListener('click', () => {
+                const block = document.querySelector('.employee-block');
+                const index = 0; // Ganti sesuai index baris
 
+                Swal.fire({
+                    title: 'Update Employee',
+                    html: `
+                        <label for="selectEmployeeID" class="block text-sm mb-1">Select Employee ID</label>
+                        <select id="selectEmployeeID" name="EmployeeID" class="select2 mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            <option value="">-- Select Employee ID --</option>
+                            ${globalEmpIDs.map(empID => `<option value="${empID}">${empID}</option>`).join('')}
+                        </select>
+
+                        <label for="startDate" class="block text-sm mt-4 mb-1">Start Date</label>
+                        <input type="datetime-local" id="startDate" class="swal2-input" value="${getDefaultDateTime()}">
+
+                        <label for="reason" class="block text-sm mt-4 mb-1">Reason</label>
+                        <select id="reason" class="swal2-select w-full mt-1 border-gray-300 rounded-md shadow-sm">
+                            <option value="">-- Select Reason --</option>
+                            <option value="Resign">Resign</option>
+                            <option value="Mutasi">Mutasi</option>
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Update',
+                    cancelButtonText: 'Cancel',
+                    didOpen: () => {
+                        $('#selectEmployeeID').select2({
+                            dropdownParent: $('.swal2-popup'),
+                            width: '100%'
+                        });
+                    },
+                    preConfirm: () => {
+                        const empID = document.getElementById('selectEmployeeID').value;
+                        const startDate = document.getElementById('startDate').value;
+                        const reason = document.getElementById('reason').value;
+
+                        if (!empID) {
+                            Swal.showValidationMessage('Please select an Employee ID');
+                            return false;
+                        }
+                        if (!startDate) {
+                            Swal.showValidationMessage('Start Date cannot be empty');
+                            return false;
+                        }
+                        if (!reason) {
+                            Swal.showValidationMessage('Please select a reason');
+                            return false;
+                        }
+
+                        return { empID, startDate, reason };
+                    }
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        const { empID, startDate, reason } = result.value;
+
+                        $('.employee-block').each(function () {
+                                const block = $(this);
+                                const indexMatch = block.find('input[name^="data"]').attr('name').match(/\d+/);
+                                if (!indexMatch) return;
+
+                                const index = indexMatch[0];
+
+                                const positionID = block.find(`input[name="data[${index}][PositionID]"]`).val();
+                                const empID = block.find(`select[name="data[${index}][EmpID]"]`).val();
+                                const employeePosition = block.find(`input[name="data[${index}][EmployeePosition]"]`).val();
+                                const kodeRayon = extractKodeRayon(positionID);
+                                const employeeName = `${employeePosition} X ${kodeRayon}`;
+                                const oldID = block.find(`input[name="data[${index}][ID]"]`).val();
+
+                                positionData.push({
+                                    oldID: oldID,
+                                    PositionID: positionID,
+                                    EmpID: empID,
+                                    EmployeePosition: employeePosition,
+                                    EmployeeName: employeeName
+                                });
+                            });
+
+                        $.ajax({
+                            url: '/position-map/update-emp',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: JSON.stringify({
+                                oldID,
+                                startDate,
+                                reason,
+                                empID,
+                                positionID
+                            }),
+                            success: function () {
+                                Swal.fire('Berhasil', 'Data telah di-set ke Vacant.', 'success')
+                                    .then(() => {
+                                        closeManageModal();
+                                        location.reload();
+                                    });
+                            },
+                            error: function () {
+                                Swal.fire('Gagal', 'Terjadi kesalahan saat menyimpan data.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
 
                 // Handle open modal with data
                 $(document).on('click', '.edit-btn', function (e) {
@@ -434,6 +541,7 @@
                             employeeIndex = 0;
 
                             let html = '';
+                             globalEmpIDs = response.empIDs;
                             dataItems.forEach(function(data) {
                                 html += generateEmployeeBlock(data, employeeIndex, globalEmpIDs);
                                 employeeIndex++;
@@ -471,7 +579,14 @@
                     Swal.fire({
                         title: 'Set to Vacant',
                         html: `
-                            <label for="vacantDate" class="block text-sm mb-1">Start Date</label>
+                            <label for="reason" class="block text-sm mb-1">Reason</label>
+                            <select id="reason" class="w-full mt-1 border-gray-300 rounded-md shadow-sm">
+                                <option value="">-- Select Reason --</option>
+                                <option value="Resign">Resign</option>
+                                <option value="Mutasi">Mutasi</option>
+                            </select>
+
+                            <label for="vacantDate" class="block text-sm mt-4 mb-1">Start Date</label>
                             <input type="datetime-local" id="vacantDate" class="swal2-input" value="${getDefaultDateTime()}">
                         `,
                         focusConfirm: false,
@@ -480,16 +595,22 @@
                         cancelButtonText: 'Batal',
                         preConfirm: () => {
                             const dateInput = document.getElementById('vacantDate').value;
+                            const reason = document.getElementById('reason').value;
+
                             if (!dateInput) {
                                 Swal.showValidationMessage('Tanggal tidak boleh kosong');
                                 return false;
                             }
-                            return dateInput;
+                            if (!reason) {
+                                Swal.showValidationMessage('Reason tidak boleh kosong');
+                                return false;
+                            }
+
+                            return { dateInput, reason };
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            const inputTanggal = result.value;
-
+                            const { dateInput, reason } = result.value;
                             const positionData = [];
 
                             $('.employee-block').each(function () {
@@ -528,8 +649,9 @@
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 data: JSON.stringify({
-                                    vacantStartDate: inputTanggal,
-                                    positions: positionData
+                                    vacantStartDate: dateInput,
+                                    positions: positionData,
+                                    reason: reason
                                 }),
                                 success: function () {
                                     Swal.fire('Berhasil', 'Data telah di-set ke Vacant.', 'success')
@@ -545,6 +667,7 @@
                         }
                     });
                 });
+
 
                 // Helper functions
                 function getDefaultDateTime() {

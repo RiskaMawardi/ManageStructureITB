@@ -36,7 +36,7 @@
     
     <h2>Position Map - RayonID: {{ $rayonID }}</h2>
      @if($rm)
-        <h3>Atasan RM: {{ $rm->employee->EmployeeName ?? '-' }} ({{ $rm->PositionID }})</h3>
+        <h3>RM: {{ $rm->employee->EmployeeName ?? '-' }} ({{ $rm->PositionID }})</h3>
     @endif
 
 

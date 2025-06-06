@@ -98,15 +98,53 @@ class StructureController extends Controller
 
     public function updateMap(Request $request)
     {
-      
-        PositionMap::where('ID', $pos['oldID'])->update([
-                    'EndDate' => $vacantStartDate,
+        try {
+            $startDate = Carbon::parse($request->startDate);
+            $reason = $request->reason;
+            $oldID = $request->oldID;
+            $empID = $request->empID;
+            $posID = $request->positionID;
+
+          
+            if ($reason === 'Resign') {
+                // End Employee
+                EmployeeList::where('EmployeeID', $empID)->update([
+                    'EndDate' => $startDate,
                     'LastUpdate' => Carbon::now('Asia/Jakarta'),
                     'UserID' => Auth::user()->name,
                 ]);
-    
-        return response()->json(['message' => 'Updated or created successfully']);
+            }
+
+            // End current PositionMap
+            PositionMap::where('ID', $oldID)->update([
+                'EndDate' => $startDate,
+                'LastUpdate' => Carbon::now('Asia/Jakarta'),
+                'UserID' => Auth::user()->name,
+            ]);
+
+            PositionMap::create([
+                'PositionID'       => $posID,
+                'EmployeePosition' => null,
+                'EmpID'            => $empID,
+                'StartDate'        => $startDate,
+                'EndDate'          => '4009-12-31',
+                'PositionStatus'   => 'A',
+                'Status_Default'   => 'Y',
+                'Acting'           => 'N',
+                'IsVacant'         => 'Y',
+                'Active'           => 'A',
+                'UserID'           => Auth::user()->name,
+                'LastUpdate'       => Carbon::now('Asia/Jakarta'),
+            ]);
+
+            return response()->json(['message' => 'Updated or created successfully']);
+
+        } catch (\Exception $e) {
+            \Log::error('Error in updateMap: ' . $e->getMessage());
+            return response()->json(['error' => 'Gagal update employee: ' . $e->getMessage()], 500);
+        }
     }
+
 
     public function generatePdf(Request $request)
     {
@@ -143,31 +181,34 @@ class StructureController extends Controller
     {
         try {
             $vacantStartDate = Carbon::parse($request->vacantStartDate);
+            $reason = $request->reason;
 
             foreach ($request->positions as $pos) {
-                // 1. Update posisi lama
+                if ($reason === 'Resign') {
+                    // Update EmployeeList end date
+                    EmployeeList::where('EmployeeID', $pos['EmpID'])->update([
+                        'EndDate' => $vacantStartDate,
+                        'LastUpdate' => Carbon::now('Asia/Jakarta'),
+                        'UserID' => Auth::user()->name,
+                    ]);
+
+                }
+
+                // Update old position
                 PositionMap::where('ID', $pos['oldID'])->update([
                     'EndDate' => $vacantStartDate,
                     'LastUpdate' => Carbon::now('Asia/Jakarta'),
                     'UserID' => Auth::user()->name,
                 ]);
 
-                // 2. Update data employee lama
-                EmployeeList::where('EmployeeID', $pos['EmpID'])->update([
-                    'EndDate' => $vacantStartDate,
-                    'LastUpdate' => Carbon::now('Asia/Jakarta'),
-                    'UserID' => Auth::user()->name,
-                ]);
-
-                // 3. Ambil kode rayon dari PositionID
+                // Ambil kode rayon
                 preg_match('/[A-Z]\d{5}$/', $pos['PositionID'], $match);
-                $kodeRayon = $match[0] ?? 'AXXXXX'; // fallback
+                $kodeRayon = $match[0] ?? 'AXXXXX';
                 $employeeName = "{$pos['EmployeePosition']} X {$kodeRayon}";
 
-                // 4. Generate EmployeeID unik
-                $joinDate = $vacantStartDate;
-                $year = $joinDate->format('Y');
-                $month = $joinDate->format('m');
+                // Generate EmployeeID dummy
+                $year = $vacantStartDate->format('Y');
+                $month = $vacantStartDate->format('m');
                 $prefix = 'IB';
                 $defaultCode = '01';
 
@@ -179,7 +220,7 @@ class StructureController extends Controller
                 $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
                 $generatedEmpID = "{$prefix}{$year}{$month}{$defaultCode}{$newNumber}";
 
-                // 5. Insert dummy employee baru
+                // Buat dummy employee baru
                 EmployeeList::create([
                     'EmployeeID'     => $generatedEmpID,
                     'EmployeeName'   => $employeeName,
@@ -193,7 +234,7 @@ class StructureController extends Controller
                     'LastUpdate'     => Carbon::now('Asia/Jakarta'),
                 ]);
 
-                // 6. Insert posisi baru (vacant)
+                // Buat posisi baru
                 PositionMap::create([
                     'PositionID'       => $pos['PositionID'],
                     'EmployeePosition' => $pos['EmployeePosition'],
@@ -212,11 +253,11 @@ class StructureController extends Controller
             }
 
             return response()->json(['success' => true]);
-
         } catch (\Exception $e) {
             \Log::error('Error in setVacant: ' . $e->getMessage());
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
     }
+
 
 }
