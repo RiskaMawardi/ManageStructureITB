@@ -99,16 +99,16 @@ class StructureController extends Controller
     public function updateMap(Request $request)
     {
         try {
-            $startDate = Carbon::parse($request->startDate);
+            $startDate = Carbon::parse($request->newStartDate);
             $reason = $request->reason;
+            $posID = $request->posID;
             $oldID = $request->oldID;
-            $empID = $request->empID;
-            $posID = $request->positionID;
-
+            $oldEmpID = $request->oldEmpID;
+            $newEmpID = $request->newEmpID;
           
             if ($reason === 'Resign') {
                 // End Employee
-                EmployeeList::where('EmployeeID', $empID)->update([
+                EmployeeList::where('EmployeeID', $oldEmpID)->update([
                     'EndDate' => $startDate,
                     'LastUpdate' => Carbon::now('Asia/Jakarta'),
                     'UserID' => Auth::user()->name,
@@ -122,10 +122,11 @@ class StructureController extends Controller
                 'UserID' => Auth::user()->name,
             ]);
 
+            //Create new PositionMap with new EmployeeID
             PositionMap::create([
                 'PositionID'       => $posID,
                 'EmployeePosition' => null,
-                'EmpID'            => $empID,
+                'EmpID'            => $newEmpID,
                 'StartDate'        => $startDate,
                 'EndDate'          => '4009-12-31',
                 'PositionStatus'   => 'A',
@@ -185,11 +186,12 @@ class StructureController extends Controller
 
             foreach ($request->positions as $pos) {
                 if ($reason === 'Resign') {
-                    // Update EmployeeList end date
+                   
                     EmployeeList::where('EmployeeID', $pos['EmpID'])->update([
                         'EndDate' => $vacantStartDate,
                         'LastUpdate' => Carbon::now('Asia/Jakarta'),
                         'UserID' => Auth::user()->name,
+                        'EmployeeStatus' => 'R'
                     ]);
 
                 }
@@ -201,10 +203,15 @@ class StructureController extends Controller
                     'UserID' => Auth::user()->name,
                 ]);
 
-                // Ambil kode rayon
-                preg_match('/[A-Z]\d{5}$/', $pos['PositionID'], $match);
-                $kodeRayon = $match[0] ?? 'AXXXXX';
-                $employeeName = "{$pos['EmployeePosition']} X {$kodeRayon}";
+               
+                if (strtoupper($pos['EmployeePosition']) === 'RM') {
+                    $rayonSuffix = substr($pos['PositionID'], -3);
+                    $employeeName = "MR X RM {$rayonSuffix}";
+                } else {
+                    preg_match('/[A-Z]\d{5}$/', $pos['PositionID'], $match);
+                    $kodeRayon = $match[0] ?? 'AXXXXX';
+                    $employeeName = "{$pos['EmployeePosition']} X {$kodeRayon}";
+                }
 
                 // Generate EmployeeID dummy
                 $year = $vacantStartDate->format('Y');

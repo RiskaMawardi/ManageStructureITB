@@ -14,7 +14,7 @@
                 </button>
                 <button id="updateEmployeeBtn" type="button" 
                         class="px-4 py-2 bg-green-600 text-white rounded shadow hover:bg-green-700 transition">
-                    Update Employee
+                    Mutasi
                 </button>
             </div>
 

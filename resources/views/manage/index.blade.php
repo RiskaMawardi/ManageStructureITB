@@ -46,11 +46,13 @@
                                     class="select2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 >
                                     <option value="">-- Select Employee ID --</option>
-                                    @foreach($empIDs as $empID)
-                                        <option value="{{ $empID }}" {{ old('EmployeeID') == $empID ? 'selected' : '' }}>
-                                            {{ $empID }}
+                            
+                                    @foreach($empIDs as $emp)
+                                        <option value="{{ $emp->EmployeeID }}" {{ old('EmployeeID') == $emp->EmployeeID ? 'selected' : '' }}>
+                                            {{ $emp->EmployeeID }} - {{ $emp->EmployeeName }}
                                         </option>
                                     @endforeach
+
                                 </select>
                             </div>
                         </div>

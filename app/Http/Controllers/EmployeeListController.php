@@ -14,10 +14,31 @@ class EmployeeListController extends Controller
 
     public function fetchDataEmployee(Request $request){
         if($request->ajax()){
-            $data = EmployeeList::query();
+            $today = Carbon::today()->toDateString();
+
+            $data = EmployeeList::where(function($query) use ($today) {
+                $query->whereNull('EndDate')
+                    ->orWhere('EndDate', '>', $today);
+            });
+
             return DataTables::of($data)->make(true);
         }
     }
+
+    public function getEmployeeList(){
+        $today = Carbon::today()->toDateString();
+
+        $empData = EmployeeList::where(function($query) use ($today) {
+            $query->whereNull('EndDate')
+                ->orWhere('EndDate', '>', $today);
+        })
+        ->select('EmployeeID', 'EmployeeName')
+        ->distinct()
+        ->get();
+
+        return response()->json($empData);
+    }
+
 
 
     public function store(Request $request){

@@ -40,63 +40,6 @@
     @include('employee.modal-edit')
 
     @push('scripts')
-        <!-- jQuery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <!-- DataTables -->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-        {{-- SweetAlert2 --}}
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            @if(session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: '{{ session('success') }}',
-                    timer: 3000,
-                    showConfirmButton: false
-                });
-            @endif
-
-            @if($errors->any())
-                let errorMessages = {!! json_encode($errors->all()) !!};
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Validation Error',
-                    html: errorMessages.join('<br>'),
-                });
-            @endif
-        </script>
-
-
-        <style>
-            table.dataTable tbody tr:hover {
-                background-color: #f9fafb;
-            }
-            .dataTables_wrapper .dataTables_paginate .paginate_button {
-                padding: 0.3rem 0.6rem;
-                border-radius: 0.375rem;
-                border: 1px solid transparent;
-                margin-left: 0.25rem;
-                font-size: 0.875rem;
-                color: #4b5563;
-                background: #f3f4f6;
-            }
-            .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-                background: #3b82f6;
-                color: white !important;
-            }
-            .dataTables_wrapper .dataTables_filter {
-                margin-bottom: 1rem;
-            }
-            .dataTables_wrapper .dataTables_paginate {
-                margin-top: 1rem;
-            }
-            #employeeTable {
-                margin-top: 0.25rem;
-            }
-        </style>
-
         <script>
             $(document).ready(function () {
                 var table = $('#employeeTable').DataTable({
@@ -188,13 +131,11 @@
                     });
                 });
             });
-
-            // Tutup modal
+         
             $('#closeEditModalBtn').on('click', function () {
                 $('#editEmployeeModal').addClass('hidden');
             });
 
-            // Tutup modal jika klik di luar kotak
             $('#editEmployeeModal').on('click', function (e) {
                 if (e.target === this) {
                     $(this).addClass('hidden');

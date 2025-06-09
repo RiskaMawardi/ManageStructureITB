@@ -12,7 +12,16 @@ use App\Models\PositionMap;
 class ManageStructureController extends Controller
 {
     public function index(){
-        $empIDs = EmployeeList::distinct()->pluck('EmployeeID');
+        $today = Carbon::today()->toDateString();
+
+        $empIDs = EmployeeList::where(function($query) use ($today) {
+            $query->whereNull('EndDate')
+                ->orWhere('EndDate', '>', $today);
+        })
+        ->select('EmployeeID', 'EmployeeName')
+        ->distinct()
+        ->get();
+
         return view('Manage.index',compact('empIDs'));
     }
 
