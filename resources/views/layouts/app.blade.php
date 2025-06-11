@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -19,7 +20,7 @@
 
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js','resources/js/pdf.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
  {{-- Styling Datatable --}}
 <style>
@@ -49,6 +50,19 @@
 </style>
 
 <body class="font-sans antialiased bg-gray-100">
+        @if(session('success')) data-success="{{ session('success') }}" @endif
+        @if($errors->any()) data-errors='@json($errors->all())' @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
     <div class="min-h-screen flex">
 
         <!-- Sidebar -->
@@ -139,14 +153,7 @@
             </main>
         </div>
     </div>
-    @if(session('success'))
-        data-success="{{ session('success') }}"
-    @endif
 
-    @if($errors->any())
-        data-errors='@json($errors->all())'
-    @endif
-   
     {{-- Libraries --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />

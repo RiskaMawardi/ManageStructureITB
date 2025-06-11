@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee/data', [EmployeeListController::class, 'fetchDataEmployee'])->name('employee.data');
     Route::post('/employee-store', [EmployeeListController::class, 'store'])->name('employee.store');
     Route::get('/employee/{id}/edit', [EmployeeListController::class, 'edit']);
-    Route::put('/employee/update/{id}', [EmployeeListController::class, 'update'])->name('employee.update');
+    Route::post('/employee/update/{id}', [EmployeeListController::class, 'update'])->name('employee.update');
     Route::get('/employee-list', [EmployeeListController::class, 'getEmployeeList']);
 
     Route::get('/structure', [StructureController::class, 'index']);

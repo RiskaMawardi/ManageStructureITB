@@ -28,13 +28,13 @@
                         </button>
 
                         {{-- Button Generate PDF --}}
-                        <form id="pdfForm" method="GET" action="{{ route('rayon.generatePdf') }}">
+                        {{-- <form id="pdfForm" method="GET" action="{{ route('rayon.generatePdf') }}">
                             <input type="hidden" name="RayonID" id="rayonIDForPdf" />
                             <button type="submit"
                                 class="mt-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
                                 Generate PDF
                             </button>
-                        </form>
+                        </form> --}}
                     </div>
                 </div>
 

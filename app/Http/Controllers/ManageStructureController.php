@@ -27,6 +27,7 @@ class ManageStructureController extends Controller
 
     public function addNewRayon(Request $request)
     {
+        //dd($request->all());
     
 
         $request->validate([
@@ -49,10 +50,11 @@ class ManageStructureController extends Controller
             'AreaGroupID' => 'nullable|string',
            
         ]);
+        //dd('masuk kesini');
 
        
         try {
-           
+           //dd('masuk kesini');
             $posStructure = PositionStructure::create([
                 'PositionID' => $request->PositionID,
                 'EmployeePosition' => $request->EmployeePosition,
@@ -79,6 +81,8 @@ class ManageStructureController extends Controller
                 'LastUpdate' => Carbon::now('Asia/Jakarta'),
                 'AreaGroupID' => $request->AreaGroupID,
             ]);
+            //dd('masuk kesini');
+            
 
             $employee = EmployeeList::where('EmployeeID', $request->employeeID)->first();
             $isVacant = $employee ? $employee->StatusVacant : 'N';

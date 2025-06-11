@@ -47,14 +47,15 @@
     </div>
 </div>
 
-<!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 document.getElementById('employeeForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const form = event.target;
+
     const name = form.name.value.trim();
+    const email = form.email.value.trim(); // <-- tambahkan
+    const phone = form.phone.value.trim(); // <-- tambahkan
     const statusVacant = form.status_vacant.value;
     const joinDate = form.join_date.value;
 
@@ -73,7 +74,6 @@ document.getElementById('employeeForm').addEventListener('submit', function(even
         return;
     }
 
-    // Konfirmasi sebelum submit
     Swal.fire({
         title: 'Are you sure?',
         text: 'Do you want to save this employee data?',
@@ -85,14 +85,37 @@ document.getElementById('employeeForm').addEventListener('submit', function(even
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            form.submit();
+            $.ajax({
+                url: form.action,
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                data: {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    status_vacant: statusVacant,
+                    join_date: joinDate
+                },
+                success: function () {
+                    Swal.fire('Success', 'Data karyawan telah disimpan.', 'success')
+                        .then(() => {
+                            document.getElementById('employeeModal').classList.add('hidden');
+                            location.reload();
+                        });
+                },
+                error: function (xhr) {
+                    Swal.fire('Gagal', xhr.responseJSON?.message || 'Terjadi kesalahan saat menyimpan data.', 'error');
+                }
+            });
         }
     });
 });
 
-// Close modal button functionality
 document.getElementById('closeModalBtn').addEventListener('click', function() {
     document.getElementById('employeeModal').classList.add('hidden');
 });
+
 </script>
 

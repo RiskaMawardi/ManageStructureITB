@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\EmployeeList;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 class EmployeeListController extends Controller
 {
     public function index(){
@@ -101,7 +102,7 @@ class EmployeeListController extends Controller
         $employee->JoinDate = $request->join_date;
         $employee->EmployeeStatus = 'A';
         $employee->EndDate = '4009-12-31';
-        $employee->UserID = 'System';
+        $employee->UserID = Auth::user()->name;
         $employee->LastUpdate = Carbon::now();
         $employee->save();
 
@@ -121,12 +122,28 @@ class EmployeeListController extends Controller
     public function update(Request $request, $id)
     {
         $employee = EmployeeList::findOrFail($id);
-        $data = $request->except('EmployeeID', '_token', '_method');
-        // Set LastUpdate to current timestamp
-        $data['LastUpdate'] = Carbon::now();
-        $employee->update($data);
-    
 
-        return redirect()->route('employee.index')->with('success', 'Employee updated successfully.');
+        $data = $request->except('EmployeeID', '_token');
+
+        // Convert ISO 8601 datetime to SQL Server compatible format
+        if (!empty($data['JoinDate'])) {
+            $data['JoinDate'] = Carbon::parse($data['JoinDate'])->format('Y-m-d H:i:s');
+        }
+
+        if (!empty($data['EndDate'])) {
+            $data['EndDate'] = Carbon::parse($data['EndDate'])->format('Y-m-d H:i:s');
+        }
+
+        $data['LastUpdate'] = Carbon::now();
+
+        $employee->update($data);
+
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Employee updated successfully.']);
+        }
+
+        return response()->json(['message' => 'Employee updated successfully.']);
     }
+
+
 }
