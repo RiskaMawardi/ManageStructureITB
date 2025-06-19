@@ -164,8 +164,33 @@
     <script src="{{ asset('assets/js/alert.js') }}"></script>
     <script src="{{ asset('assets/js/select2.js') }}"></script>
 
+    @if(session('swal_success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('swal_success') }}',
+                confirmButtonColor: '#3085d6',
+            });
+        </script>
+    @endif
+
+    @if(session('swal_error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Import Failed!',
+                text: '{{ session('swal_error') }}',
+                confirmButtonColor: '#d33',
+            });
+        </script>
+    @endif
+
+
 
     @stack('scripts')
+
+
     
 </body>
 

@@ -122,4 +122,18 @@ class ManageStructureController extends Controller
 
         return response()->json(['exists' => $exists]);
     }
+
+    public function getPositionID(){
+        $today = Carbon::today()->toDateString();
+
+        $posID = PositionStructure::where(function($query) use ($today) {
+            $query->whereNull('EndDate')
+                ->orWhere('EndDate', '>', $today);
+        })
+        ->select('PositionID')
+        ->distinct()
+        ->get();
+
+        return response()->json($posID);
+    }
 }

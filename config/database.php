@@ -113,6 +113,19 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'sqlsrv_hr_ibt' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HR_IBT_HOST', '172.16.3.230\IBTDWH'),
+            'port' => env('DB_HR_IBT_PORT', null),
+            'database' => env('DB_HR_IBT_DATABASE', 'HR_IBT'),
+            'username' => env('DB_HR_IBT_USERNAME', 'sa'),
+            'password' => env('DB_HR_IBT_PASSWORD', 'IT@dm1n'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'trust_server_certificate' => true,
+        ],
+
     ],
 
     /*

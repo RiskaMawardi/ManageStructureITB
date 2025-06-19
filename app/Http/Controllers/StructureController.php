@@ -9,6 +9,7 @@ use App\Models\PositionStructure;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use DataTables;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
@@ -17,6 +18,8 @@ class StructureController extends Controller
     public function index()
     {
        $rayonIDs = PositionStructure::where('LineID', 'ETHICAL')
+        ->whereNotNull('RayonID')                 
+        ->where('RayonID', '!=', '')             
         ->where(function($query) {
             $query->whereNull('EndDate')
                 ->orWhere('EndDate', '>', Carbon::now());
@@ -24,7 +27,7 @@ class StructureController extends Controller
         ->distinct()
         ->orderBy('RayonID')
         ->pluck('RayonID');
-        //dd($rayonIDs);
+      
         return view('structure.index', compact('rayonIDs'));
     }
 
@@ -55,14 +58,25 @@ class StructureController extends Controller
             ->addColumn('PositionID', function ($position) {
                 return $position->PositionID ?? '-';
             })
+            ->addColumn('EmployeeID', function ($position) {
+                return $position->EmpID ?? '-';
+            })
+            ->addColumn('EmployeePosition', function ($position) {
+                return $position->EmployeePosition ?? '-';
+            })
             ->addColumn('StartDatePosStructure', function ($position) {
                 return optional($position->positionStructure)->StartDate ?? '-';
             })
             ->addColumn('StartDatePosMap', function ($position) {
                 return $position->StartDate ?? '-';
             })
+            ->addColumn('PositionRecord', function ($position) {
+                return optional($position->positionStructure)->PositionRecord ?? '-';
+            })
+
             ->make(true);
     }
+
     public function show($id)
     {
         $data = PositionMap::with(['employee', 'positionStructure'])
@@ -93,8 +107,6 @@ class StructureController extends Controller
             'empIDs' => $empIDs,
         ]);
     }
-
-
 
     public function updateMap(Request $request)
     {
@@ -145,7 +157,6 @@ class StructureController extends Controller
             return response()->json(['error' => 'Gagal update employee: ' . $e->getMessage()], 500);
         }
     }
-
 
     public function generatePdf(Request $request)
     {
@@ -266,5 +277,71 @@ class StructureController extends Controller
         }
     }
 
+    public function promoteToNewPosition(Request $request)
+    {
+        $request->validate([
+            'ID' => 'required',
+            'EmpID' => 'required',
+            'posID' => 'required',
+            'PositionID' => 'required',
+            'EmployeePosition' => 'required',
+            'StartDate' => 'required|date',
+        ]);
+
+        $ID = $request->ID;
+        $posID = $request->posID;
+        $empID = $request->EmpID;
+        $newPositionID = $request->PositionID;
+        $newPosition = $request->EmployeePosition;
+        $startDate = $request->StartDate;
+
+        DB::beginTransaction();
+        try {
+
+            PositionStructure::where('PositionRecord',$posID)->update([
+                'EndDate' => Carbon::parse($startDate)->subDay(),
+                'LastUpdate' => now(),
+                'UserID' => auth()->user()->username ?? 'system',
+            ]);
+
+            PositionStructure::insert([
+                'PositionID' => $newPositionID,
+                'EmployeePosition' => $newPosition,
+            ]);
+
+            PositionMap::where('ID', $ID)
+            ->where(function ($q) {
+                $q->whereNull('EndDate')
+                ->orWhere('EndDate', '>', now());
+            })
+            ->update([
+                'EndDate' => Carbon::parse($startDate)->subDay(),
+                'LastUpdate' => now(),
+                'UserID' => auth()->user()->username ?? 'system',
+            ]);
+
+           
+            PositionMap::insert([
+                'PositionID' => $newPositionID,
+                'EmpID' => $empID,
+                'EmployeePosition' => $newPosition,
+                'Status_Default' => 'N',
+                'Acting' => 'N',
+                'IsVacant' => 'N',
+                'IsCoordinator' => null,
+                'Active' => 'Y',
+                'StartDate' => $startDate,
+                'EndDate' => '4009-12-31',
+                'UserID' => auth()->user()->username ?? 'system',
+                'LastUpdate' => now(),
+            ]);
+
+            DB::commit();
+            return back()->with('success', "Promosi ke $newPosition berhasil.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal promosi: ' . $e->getMessage());
+        }
+    }
 
 }

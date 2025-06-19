@@ -7,6 +7,9 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Models\EmployeeList;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\EmployeeImport;
+use Illuminate\Support\Facades\Log;
 class EmployeeListController extends Controller
 {
     public function index(){
@@ -39,8 +42,6 @@ class EmployeeListController extends Controller
 
         return response()->json($empData);
     }
-
-
 
     public function store(Request $request){
         //dd($request->all());
@@ -112,7 +113,6 @@ class EmployeeListController extends Controller
 
     }
 
-
     public function edit($id)
     {
         $employee = EmployeeList::findOrFail($id);
@@ -143,6 +143,22 @@ class EmployeeListController extends Controller
         }
 
         return response()->json(['message' => 'Employee updated successfully.']);
+    }
+
+    public function import(Request $request)
+    {
+         $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        try {
+            Excel::import(new EmployeeImport, $request->file('file'));
+
+            return back()->with('swal_success', 'Employees imported successfully.');
+        } catch (\Exception $e) {
+            Log::error('Import Error: ' . $e->getMessage());
+            return back()->with('swal_error', 'Import failed: ' . $e->getMessage());
+        }
     }
 
 

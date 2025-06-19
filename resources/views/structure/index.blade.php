@@ -5,63 +5,74 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm sm:rounded-lg p-6">
-                <div class="mb-4">
-                    <label for="rayonID" class="block text-sm font-medium text-gray-700">Pilih RayonID</label>
+   <div class="py-6">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white shadow-sm sm:rounded-lg p-6">
 
-                    <div class="flex gap-4">
-                        {{-- Select Rayon --}}
-                        <select id="rayonID" name="RayonID"
-                            class="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                            <option value="">-- Pilih RayonID --</option>
-                            @foreach($rayonIDs as $rayonID)
+            {{-- Pilih Rayon + Tampilkan --}}
+            <div class="mb-4">
+                <label for="rayonID" class="block text-sm font-medium text-gray-700">Pilih RayonID</label>
+
+                <div class="flex gap-4">
+                    {{-- Select Rayon --}}
+                    <select id="rayonID" name="RayonID"
+                        class="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">-- Pilih RayonID --</option>
+                        @foreach($rayonIDs as $rayonID)
                             <option value="{{ $rayonID }}">{{ $rayonID }}</option>
-                            @endforeach
-                        </select>
+                        @endforeach
+                    </select>
 
-                        {{-- Button Tampilkan --}}
-                        <button id="loadDataBtn"
-                            class="mt-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
-                            Tampilkan
-                        </button>
-
-                        {{-- Button Generate PDF --}}
-                        {{-- <form id="pdfForm" method="GET" action="{{ route('rayon.generatePdf') }}">
-                            <input type="hidden" name="RayonID" id="rayonIDForPdf" />
-                            <button type="submit"
-                                class="mt-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
-                                Generate PDF
-                            </button>
-                        </form> --}}
-                    </div>
+                    {{-- Button Tampilkan --}}
+                    <button id="loadDataBtn"
+                        class="mt-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                        Tampilkan
+                    </button>
+                     <button type="button" id="openExcelModalBtn"
+                        class="mt-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                        Upload Excel
+                    </button>
                 </div>
-
-
-                {{-- Tabel --}}
-                <table id="positionsTable" class="min-w-full divide-y divide-gray-200 border">
-                    <thead>
-                        <tr class="bg-gray-50">
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Position ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Start Date Structure</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Start Date Map</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Action</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                
             </div>
+
+            {{-- Tabel --}}
+            <table id="positionsTable" class="min-w-full divide-y divide-gray-200 border">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Position ID
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Employee ID
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Employee Position
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Start Date Structure
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Start Date Map
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
         </div>
     </div>
+</div>
+
 
     {{-- Modals --}}
     @include('structure.modal-manage')
     @include('structure.modal-update-emp')
+    @include('structure.modal-promote')
+    @include('structure.modal-upload')
 
     @push('scripts')
         <script>
@@ -92,6 +103,8 @@
                     },
                     columns: [
                         { data: 'PositionID',name: 'PositionID',},
+                        { data: 'EmployeeID',name: 'EmployeeID',},
+                        { data: 'EmployeePosition',name: 'EmployeePosition',},
                         { 
                             data: 'StartDatePosStructure', 
                             name: 'StartDatePosStructure',
@@ -114,11 +127,25 @@
                             className: 'text-center',
                             render: function (data, type, row) {
                                 return `
-                                    <button class="edit-btn text-yellow-500 hover:text-yellow-700" data-id="${row.PositionID}" title="Edit">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <!-- Tombol Edit -->
+                                        <button class="edit-btn flex items-center gap-1 px-3 py-1.5 text-yellow-600 bg-yellow-100 hover:bg-yellow-200 rounded shadow text-sm" 
+                                                data-id="${row.PositionID}" title="Edit">
+                                            <i class="fas fa-pencil-alt"></i>
+                                            Edit
+                                        </button>
+
+                                        <!-- Tombol Promote -->
+                                        <button type="button"
+                                            class="openPromoteModalBtn flex items-center gap-1 px-3 py-1.5 bg-amber-500 text-white hover:bg-amber-600 rounded shadow text-sm transition"
+                                            data-empid="${row.EmployeeID}" data-posid="${row.PositionRecord}" data-id="${row.ID}">
+                                            <i class="fas fa-arrow-up"></i>
+                                            Promote
+                                        </button>
+                                    </div>
                                 `;
                             }
+
                         }
                     ],
                     deferLoading: 0,
@@ -143,6 +170,10 @@
                         return;
                     }
                     table.ajax.reload();
+                });
+
+                 table.on('xhr.dt', function (e, settings, json, xhr) {
+                    console.log("Full server response:", json); // Akan tampil di browser console
                 });
 
             });
@@ -469,7 +500,7 @@
                                 Swal.fire('Berhasil', 'Employee berhasil diperbarui.', 'success').then(() => {
                                     $('#updateEmployeeModal').addClass('hidden');
                                     $('#manageModal').removeClass('hidden');
-                                    location.reload(); // Optional: reload jika perlu refresh data
+                                    location.reload();
                                 });
                             },
                             error: function(xhr) {
@@ -480,7 +511,68 @@
                 });
             });
 
+
         </script>
+       <script>
+            $(document).on('click', '.openPromoteModalBtn', function () {
+                const ID = $(this).data('id');
+                const EmpID = $(this).data('empid');
+                const PosID = $(this).data('posid');
+                //console.log(PosID);
+
+                $('#promoteID').val(ID);
+                $('#EmpID').val(EmpID);
+                $('#posPromoteID').val(PosID);
+            
+
+                $('#PositionID').html('<option value="">-- Pilih Position ID --</option>');
+                $('#promoteModal').removeClass('hidden');
+
+                // Fetch employee list
+                $.ajax({
+                    url: '/get-posID',
+                    method: 'GET',
+                    success: function (positions) {
+                        $('#PositionID').empty().append('<option value="">-- Pilih Position ID --</option>');
+                        positions.forEach(pos => {
+                            $('#PositionID').append(`<option value="${pos.PositionID}">${pos.PositionID}</option>`);
+                        });
+                    },
+
+                    error: function () {
+                        alert('Gagal mengambil daftar employee.');
+                    }
+                });
+                
+            });
+
+            $(document).on('click', '#closePromoteModalBtn', function () {
+                $('#promoteModal').addClass('hidden');
+            });
+
+            $(document).on('click', '#promoteModal', function (e) {
+                if ($(e.target).is('#promoteModal')) {
+                    $('#promoteModal').addClass('hidden');
+                }
+            });
+        </script>
+        <script>
+            $('#openExcelModalBtn').on('click', function () {
+                $('#excelUploadModal').removeClass('hidden');
+            });
+
+            $('#closeExcelModalBtn').on('click', function () {
+                $('#excelUploadModal').addClass('hidden');
+            });
+
+            $('#excelUploadModal').on('click', function (e) {
+                if ($(e.target).is('#excelUploadModal')) {
+                    $(this).addClass('hidden');
+                }
+            });
+        </script>
+
+
     @endpush
 
 </x-app-layout>

@@ -9,6 +9,11 @@ export default {
         './resources/views/**/*.blade.php',
     ],
 
+    safelist: [
+        'bg-amber-500',
+        'hover:bg-amber-600',
+    ],
+    
     theme: {
         extend: {
             fontFamily: {

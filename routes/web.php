@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/employee/{id}/edit', [EmployeeListController::class, 'edit']);
     Route::post('/employee/update/{id}', [EmployeeListController::class, 'update'])->name('employee.update');
     Route::get('/employee-list', [EmployeeListController::class, 'getEmployeeList']);
+    Route::post('/employee/import', [EmployeeListController::class, 'import'])->name('employee.import');
+
 
     Route::get('/structure', [StructureController::class, 'index']);
     Route::post('/fetch-data', [StructureController::class, 'fetchDataByArea'])->name('structure.fetchData');
@@ -35,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/manage', [ManageStructureController::class, 'index']);
     Route::get('/check-position-id', [ManageStructureController::class, 'checkPositionId']);
     Route::post('/add-new-rayon',[ManageStructureController::class,'addNewRayon'])->name('addNewRayon');
+    Route::get('/get-posID',[ManageStructureController::class,'getPositionID']);
 
     Route::get('/rayon/generate-pdf', [StructureController::class, 'generatePdf'])->name('rayon.generatePdf');
     Route::post('/position-map/set-vacant', [StructureController::class, 'setVacant']);

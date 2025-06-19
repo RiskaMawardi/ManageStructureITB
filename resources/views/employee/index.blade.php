@@ -8,17 +8,25 @@
 
     <div class="py-6 px-4 sm:px-6 lg:px-8">
         <div class="bg-white shadow-sm rounded-lg p-6">
+            {{-- Header and Action Buttons --}}
             <div class="mb-4 flex justify-between items-center">
                 <div>
                     <h3 class="text-lg font-semibold text-gray-800">Employee Data Table</h3>
                     <p class="text-sm text-gray-500">Below is a list of all active employees.</p>
                 </div>
-                <button id="openModalBtn" 
+                <div class="flex space-x-2">
+                    <button id="openImportModalBtn"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md transition duration-200">
+                        📁 Import Excel
+                    </button>
+                    <button id="openModalBtn"
                         class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md transition duration-200">
-                    + Add Employee
-                </button>
+                        + Add Employee
+                    </button>
+                </div>
             </div>
 
+            {{-- Table --}}
             <div class="overflow-x-auto">
                 <table id="employeeTable" class="w-full text-sm text-left table-auto stripe hover">
                     <thead class="bg-gray-100 text-xs uppercase text-gray-700">
@@ -27,6 +35,8 @@
                             <th class="px-4 py-3">Name</th>
                             <th class="px-4 py-3">Status Vacant</th>
                             <th class="px-4 py-3">Join Date</th>
+                            <th class="px-4 py-3">Last Update</th>
+                            <th class="px-4 py-3">Update By</th>
                             <th class="px-4 py-3 text-center">Action</th>
                         </tr>
                     </thead>
@@ -35,13 +45,15 @@
         </div>
     </div>
 
-    {{-- Modal Add & Edit --}}
+    {{-- Modals --}}
     @include('employee.modal-add')
     @include('employee.modal-edit')
+    @include('employee.modal-import')
 
     @push('scripts')
     <script>
         $(document).ready(function () {
+            // Initialize DataTable
             const table = $('#employeeTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -57,6 +69,15 @@
                             return data ? data.substring(0, 10) : '';
                         }
                     },
+                    {
+                        data: 'LastUpdate',
+                        name: 'LastUpdate',
+                        render: function (data) {
+                            return data ? data.substring(0, 10) : '';
+                        }
+                    },
+                  
+                    { data: 'UserID', name: 'UserID' },
                     {
                         data: null,
                         orderable: false,
@@ -81,26 +102,16 @@
                     zeroRecords: "No matching employees found",
                     info: "Showing _START_ to _END_ of _TOTAL_ entries",
                     infoEmpty: "No entries available",
-                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    infoFiltered: "(filtered from _MAX_ total entries)"
                 }
             });
 
-            // Open Add Modal
-            $('#openModalBtn').on('click', function () {
-                $('#employeeModal').removeClass('hidden');
-            });
+            // Modal Add
+            $('#openModalBtn').click(() => $('#employeeModal').removeClass('hidden'));
+            $('#closeModalBtn').click(() => $('#employeeModal').addClass('hidden'));
+            $('#employeeModal').click(e => { if (e.target === e.currentTarget) $('#employeeModal').addClass('hidden'); });
 
-            // Close Add Modal
-            $('#closeModalBtn').on('click', function () {
-                $('#employeeModal').addClass('hidden');
-            });
-
-            // Close Add Modal on background click
-            $('#employeeModal').on('click', function (e) {
-                if (e.target === this) $(this).addClass('hidden');
-            });
-
-            // Open Edit Modal
+            // Modal Edit
             $('#employeeTable').on('click', '.edit-btn', function (e) {
                 e.preventDefault();
                 const url = $(this).data('url');
@@ -124,30 +135,15 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Failed',
-                        text: 'Cannot fetch employee data.',
+                        text: 'Cannot fetch employee data.'
                     });
                 });
             });
 
-            // Close Edit Modal
-            $('#closeEditModalBtn').on('click', function () {
-                $('#editEmployeeModal').addClass('hidden');
-            });
+            $('#closeEditModalBtn').click(() => $('#editEmployeeModal').addClass('hidden'));
+            $('#editEmployeeModal').click(e => { if (e.target === e.currentTarget) $('#editEmployeeModal').addClass('hidden'); });
 
-            $('#editEmployeeModal').on('click', function (e) {
-                if (e.target === this) $(this).addClass('hidden');
-            });
-        });
-    </script>
-    
-    <script>
-        $(document).ready(function () {
-            // Prevent form default submit
-            $('#editEmployeeForm').on('submit', function (e) {
-                e.preventDefault(); // prevent pressing Enter from submitting
-            });
-
-            // SweetAlert confirmation before AJAX update
+            // Save Edit with SweetAlert confirmation
             $('#saveEditBtn').click(function () {
                 const id = $('#editEmpId').val();
                 const url = '/employee/update/' + id;
@@ -181,7 +177,6 @@
                                 });
                             },
                             error: function (xhr) {
-                                console.log('Error:', xhr.responseText);
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Update Failed',
@@ -193,9 +188,10 @@
                 });
             });
 
-            $('#closeEditModalBtn').click(function () {
-                $('#editEmployeeModal').addClass('hidden');
-            });
+            // Import Modal
+            $('#openImportModalBtn').click(() => $('#importEmployeeModal').removeClass('hidden'));
+            $('#closeImportModalBtn').click(() => $('#importEmployeeModal').addClass('hidden'));
+            $('#importEmployeeModal').click(e => { if (e.target === e.currentTarget) $('#importEmployeeModal').addClass('hidden'); });
         });
     </script>
     @endpush
